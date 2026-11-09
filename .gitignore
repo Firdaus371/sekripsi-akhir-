@@ -1,0 +1,27 @@
+# Folder Node.js
+node_modules/
+frontend/node_modules/
+npm-debug.log
+
+# Folder hasil build Next.js
+.next/
+frontend/.next/
+out/
+
+# Folder upload bukti pengaduan
+uploads/
+
+# File environment dan rahasia
+.env
+.env.*
+!.env.example
+
+# File hasil build Golang
+main
+main.exe
+*.exe
+*.exe~
+tmp/
+
+# File log
+*.log

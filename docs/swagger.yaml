@@ -1,0 +1,208 @@
+basePath: /
+definitions:
+  handler.ErrorResponse:
+    properties:
+      error:
+        example: Input tidak valid
+        type: string
+    type: object
+  handler.LoginInput:
+    properties:
+      email:
+        example: budi@student.com
+        type: string
+      password:
+        example: rahasia123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.LoginResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1Ni...
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/model.User'
+        description: <--- SAYA UBAH INI (Pakai Bintang *)
+    type: object
+  handler.RegisterInput:
+    properties:
+      email:
+        example: budi@student.com
+        type: string
+      gender:
+        example: Laki-laki
+        type: string
+      name:
+        example: Budi Santoso
+        type: string
+      nim:
+        example: "12345678"
+        type: string
+      password:
+        example: rahasia123
+        minLength: 6
+        type: string
+      phone:
+        example: "08123456789"
+        type: string
+      prodi:
+        example: Informatika
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - phone
+    type: object
+  handler.RegisterResponse:
+    properties:
+      email:
+        example: budi@student.com
+        type: string
+      message:
+        example: Kode OTP telah dikirim ke WhatsApp Anda
+        type: string
+      step:
+        example: verification
+        type: string
+    type: object
+  handler.VerifyOTPInput:
+    properties:
+      email:
+        example: budi@student.com
+        type: string
+      otp:
+        example: "123456"
+        type: string
+    required:
+    - email
+    - otp
+    type: object
+  handler.VerifyResponse:
+    properties:
+      message:
+        example: Registrasi Berhasil! Silakan Login.
+        type: string
+    type: object
+  model.User:
+    properties:
+      avatar_url:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      gender:
+        description: BARU
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nim:
+        type: string
+      phone:
+        description: BARU
+        type: string
+      prodi:
+        description: BARU
+        type: string
+      role:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@studentvoice.com
+    name: Tim Pengembang
+  description: Dokumentasi API untuk Aplikasi Student Voice (Skripsi).
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Student Voice API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Masuk ke aplikasi dan dapatkan Token
+      parameters:
+      - description: Data Login
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Login User
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Mendaftarkan mahasiswa baru dan mengirim OTP WA
+      parameters:
+      - description: Data Pendaftaran
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Daftar Akun Baru
+      tags:
+      - Auth
+  /auth/verify-otp:
+    post:
+      consumes:
+      - application/json
+      description: Memasukkan kode OTP untuk mengaktifkan akun
+      parameters:
+      - description: Data OTP
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.VerifyOTPInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.VerifyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Verifikasi Kode OTP
+      tags:
+      - Auth
+swagger: "2.0"
